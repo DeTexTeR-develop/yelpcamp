@@ -1,3 +1,4 @@
+const { AsyncLocalStorage } = require('async_hooks');
 const express = require('express');
 const { default: mongoose, mongo, models } = require('mongoose');
 const app = express();
@@ -20,12 +21,17 @@ app.get('/', (req, res) => {
     res.render('home')
 })
 
-app.get('/makecampground', async (req, res) => {
-    let camp = new Campground({title:"backyard", description:'cheap Camping!'})
-    await camp.save();
-    res.send(camp);
+app.get('/campgrounds', async (req, res) => {
+    const allcamprounds = await Campground.find({});
+    res.render('campgrounds/index', {allcamprounds});
 })
 
+app.get('/campgrounds/:id', async (req, res) => {
+    const {id} = req.params;
+    const selectedCamp = await Campground.findById(id);
+    res.render('campgrounds/show', {selectedCamp});
+
+})
 app.listen(3000, ()=> {
     console.log("Listening on port 3000");
 })
