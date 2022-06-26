@@ -11,8 +11,9 @@
     <ul>
         <% for(let camp of allcamprounds){ %>
             <li><%= camp.title %> </li> 
-            <a href="/campgrounds/<%= camp._id %> ">Show</a>
+            <a href="/campgrounds/<%= camp._id %> ">Show</a> 
         <% } %>  
     </ul>
+    <button><a href="/campgrounds/create"> Create New Campground</a></button>
 </body>
 </html>
