@@ -6,6 +6,7 @@ const path = require('path');
 const { findById, findByIdAndDelete } = require('./models/campground');
 const Campground = require('./models/campground');
 const methodOverrride = require('method-override');
+const ejsMate = require('ejs-mate');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
@@ -18,6 +19,7 @@ db.once("open", ()=>{
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+app.engine('ejs', ejsMate);
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverrride('_method'))
 
