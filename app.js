@@ -24,7 +24,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverrride('_method'))
 
 app.get('/', (req, res) => {
-    res.render('home')
+    res.render('campgrounds/home')
 })
 
 app.get('/campgrounds', async (req, res) => {
