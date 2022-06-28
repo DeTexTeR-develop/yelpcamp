@@ -37,14 +37,10 @@ app.get('/campgrounds/create', (req, res) => {
 })
 
 app.post('/campgrounds', async (req, res) => {
-    const newCamp = new Campground({
-        title: req.body.Title,
-        location: req.body.location
-    })
-    await newCamp.save();
-    res.redirect(`/campgrounds/${newCamp._id}`);
-    
-});
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`)
+})
 
 app.get('/campgrounds/:id', async (req, res) => {
     const {id} = req.params;
