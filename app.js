@@ -7,6 +7,8 @@ const { findById, findByIdAndDelete } = require('./models/campground');
 const Campground = require('./models/campground');
 const methodOverrride = require('method-override');
 const ejsMate = require('ejs-mate');
+const { stat } = require('fs');
+const { wrap } = require('module');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
@@ -48,6 +50,8 @@ app.get('/campgrounds/:id', async (req, res) => {
     res.render('campgrounds/show', {campground});
 })
 
+//update Campground
+
 app.get('/campgrounds/:id/edit', async (req, res) => {
     const {id} = req.params;
     const campground = await Campground.findById(id);
@@ -55,17 +59,34 @@ app.get('/campgrounds/:id/edit', async (req, res) => {
 
 })
 
-// app.put('/campgrounds/:id', async (req, res) => {
-//     const {id} = req.params;
-//     const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground});
-//     res.redirect(`/campgrounds/${id}`);
+// we can catch error in async in 2 ways
+
+// app.put('/campgrounds/:id', async (req, res, next) => {
+//     try{
+//         const { id } = req.params;
+//         const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+//         res.redirect(`/campgrounds/${campground._id}`)
+//     }
+//     catch(err){
+//         next(e);
+//     }
 // });
 
-app.put('/campgrounds/:id', async (req, res) => {
+//                                               or
+
+
+function wrapAsync(fn){
+    return function(req, res, next){
+        fn(req, res, next).catch(err => next(err));
+    }
+}
+app.put('/campgrounds/:id', wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     res.redirect(`/campgrounds/${campground._id}`)
-});
+}));
+
+//delete campground
 
 app.delete('/campgrounds/:id', async(req, res) => {
     const { id } = req.params;
@@ -73,6 +94,9 @@ app.delete('/campgrounds/:id', async(req, res) => {
     res.redirect('/campgrounds');
 })
 
+app.use((err, req, res, next) => {
+    res.send('oh no error ')
+})
 app.listen(3000, ()=> {
     console.log("Listening on port 3000");
 })
