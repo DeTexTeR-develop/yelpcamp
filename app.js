@@ -10,7 +10,8 @@ const ejsMate = require('ejs-mate');
 const { stat } = require('fs');
 const { wrap } = require('module');
 const ExpressError = require('./utils/ExpressError')
-const wrapAsync = require('./utils/catchAsync')
+const wrapAsync = require('./utils/catchAsync');
+
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
@@ -42,7 +43,8 @@ app.get('/campgrounds/create', (req, res) => {
     res.render('campgrounds/create');
 })
 
-app.post('/campgrounds',wrapAsync(async (req, res) => {
+app.post('/campgrounds',wrapAsync(async (req, res, next) => {
+    if(!req.body.campground) throw new ExpressError("Invalid Campground Data", 400);
     const campground = new Campground(req.body.campground);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`)
@@ -94,8 +96,15 @@ app.delete('/campgrounds/:id', wrapAsync(async(req, res) => {
     res.redirect('/campgrounds');
 }))
 
+app.all('*', (req, res, next) => {
+    next(new ExpressError("Page not found", 404));
+});
+
 app.use((err, req, res, next) => {
-    res.send('oh no error ')
+    const {statusCode = 500} = err;
+    if(!err.message) err.message = 'Oh no, Something went Wrong!';
+    res.status(statusCode).render('error', { err });
+    
 })
 app.listen(3000, ()=> {
     console.log("Listening on port 3000");
