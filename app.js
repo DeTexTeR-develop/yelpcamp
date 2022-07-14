@@ -4,7 +4,7 @@ const { default: mongoose, mongo, models } = require('mongoose');
 const app = express();
 const path = require('path');
 const { findById, findByIdAndDelete } = require('./models/campground');
-const {campgroundSchema} = require('./schemas.js')
+const {campgroundSchema, reviewSchema} = require('./schemas.js')
 const Campground = require('./models/campground');
 const methodOverrride = require('method-override');
 const ejsMate = require('ejs-mate');
@@ -35,11 +35,21 @@ app.use(methodOverrride('_method'))
 
 
 const validateCampground = (req, res, next) => {
-    
     const {error} = campgroundSchema.validate(req.body);
     if(error){
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
+    }else{
+        next();
+    }
+}
+
+const validateReview = (req, res, next) => {
+    const{error} = reviewSchema.validate(req.body);
+    console.log(error);
+    if(error){
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
     }else{
         next();
     }
@@ -111,7 +121,7 @@ app.delete('/campgrounds/:id', wrapAsync(async(req, res) => {
     res.redirect('/campgrounds');
 }))
 
-app.post('/campgrounds/:id/reviews', wrapAsync(async(req, res) => {
+app.post('/campgrounds/:id/reviews',validateReview, wrapAsync(async(req, res) => {
     const {id} = req.params;
     const campground = await Campground.findById(id);
     const review = new Review(req.body.review);
