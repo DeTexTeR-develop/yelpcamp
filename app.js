@@ -46,7 +46,6 @@ const validateCampground = (req, res, next) => {
 
 const validateReview = (req, res, next) => {
     const{error} = reviewSchema.validate(req.body);
-    console.log(error);
     if(error){
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400);
@@ -77,7 +76,7 @@ app.post('/campgrounds',validateCampground, wrapAsync(async (req, res, next) => 
 
 app.get('/campgrounds/:id', wrapAsync(async (req, res) => {
     const {id} = req.params;
-    const campground = await Campground.findById(id);
+    const campground = await Campground.findById(id).populate('reviews');
     res.render('campgrounds/show', {campground});
 }))
 
