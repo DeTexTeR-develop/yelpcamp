@@ -10,6 +10,7 @@ const ExpressError = require('./utils/ExpressError')
 const campgroundRoutes = require('./routers/campground');
 const reviewRoutes = require('./routers/reviews');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp'); 
@@ -29,6 +30,7 @@ app.engine('ejs', ejsMate);
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverrride('_method'))
 app.use(express.static('public'))
+app.use(flash());
 
 const msInWeek = 1000*60*60*24*7;
 const sessionConfig = {
@@ -45,6 +47,11 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 
 
+app.use((req, res , next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+})
 
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
