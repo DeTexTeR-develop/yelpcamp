@@ -9,6 +9,7 @@ const { wrap } = require('module');
 const ExpressError = require('./utils/ExpressError')
 const campgroundRoutes = require('./routers/campground');
 const reviewRoutes = require('./routers/reviews');
+const session = require('express-session');
 
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp'); 
@@ -28,6 +29,20 @@ app.engine('ejs', ejsMate);
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverrride('_method'))
 app.use(express.static('public'))
+
+const msInWeek = 1000*60*60*24*7;
+const sessionConfig = {
+    secret: 'thisShouldBeABetterSecret',
+    resave:false,
+    saveUninitialized:true,
+    cookie: {
+        httpOnly:true,
+        expires: Date.now() + msInWeek,
+        maxAge: msInWeek
+    }
+};
+
+app.use(session(sessionConfig));
 
 
 
