@@ -18,6 +18,10 @@ const validateCampground = (req, res, next) => {
 }
 
 
+router.get('/home',(req, res) => {
+    res.render('campgrounds/home')
+})
+
 router.get('/', catchAsync(async (req, res) => {
     const allcamprounds = await Campground.find({});
     res.render('campgrounds/index', {allcamprounds});

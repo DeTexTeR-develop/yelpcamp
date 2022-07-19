@@ -1,18 +1,12 @@
-const { AsyncLocalStorage } = require('async_hooks');
 const express = require('express');
 const { default: mongoose, mongo, models } = require('mongoose');
 const app = express();
 const path = require('path');
-const { findById, findByIdAndDelete } = require('./models/campground');
-const {campgroundSchema, reviewSchema} = require('./schemas.js')
-const Campground = require('./models/campground');
 const methodOverrride = require('method-override');
 const ejsMate = require('ejs-mate');
 const { stat } = require('fs');
 const { wrap } = require('module');
 const ExpressError = require('./utils/ExpressError')
-const wrapAsync = require('./utils/catchAsync');
-const Review = require('./models/review');
 const campgroundRoutes = require('./routers/campground');
 const reviewRoutes = require('./routers/reviews');
 
@@ -33,7 +27,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('ejs', ejsMate);
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverrride('_method'))
-
+app.use(express.static('public'))
 
 
 
