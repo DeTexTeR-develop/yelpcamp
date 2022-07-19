@@ -1,3 +1,5 @@
+//this is a custom error
+
 class ExpressError extends Error{
     constructor(message, statusCode){
         super();

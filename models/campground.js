@@ -1,3 +1,5 @@
+//schema for our campgrounds
+
 const mongoose = require('mongoose');
 const Review = require('./review')
 const Schema = mongoose.Schema;
@@ -15,6 +17,9 @@ const CampGroundSchema = new Schema({
         }
     ]
 });
+
+//when find one and delete will be called after deleting this function will run and will have access to doc which is deleted
+
 CampGroundSchema.post('findOneAndDelete', async function(doc){
     if(doc){
         await Review.deleteMany({

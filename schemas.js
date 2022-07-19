@@ -1,3 +1,5 @@
+//this is for validation using joi
+
 const Joi = require('joi');
 module.exports.campgroundSchema = Joi.object({
     campground: Joi.object({

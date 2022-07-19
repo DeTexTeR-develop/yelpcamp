@@ -1,3 +1,5 @@
+//this to seed our db with fake data to work on!
+
 const mongoose = require('mongoose');
 const Cities = require('./cities');
 const {descriptors, places} = require('./seedHelpers');
