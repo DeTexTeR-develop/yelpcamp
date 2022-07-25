@@ -1,6 +1,6 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">PGFinder</a>
+      <a class="navbar-brand" href="#">YelpCamp</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -16,6 +16,16 @@
             <a class="nav-link" href="/campgrounds/create ">New Camp</a>
           </li>
         </ul>
+        <div class="navbar-nav ms-auto">
+          <% if(currentUser == undefined){ %> 
+            <a class="nav-link" href="/user/login">Login</a>
+            <a class="nav-link" href="/user/register">Register</a>
+          <% } else { %> 
+            <a class="nav-link" href="/user/logout">Logout</a>
+          <%  }%>  
+
+
+        </div>
       </div>
     </div>
   </nav>
