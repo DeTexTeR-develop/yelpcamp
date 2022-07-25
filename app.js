@@ -1,11 +1,9 @@
 const express = require('express');
-const { default: mongoose, mongo, models } = require('mongoose');
+const { default: mongoose} = require('mongoose');
 const app = express();
 const path = require('path');
 const methodOverrride = require('method-override');
 const ejsMate = require('ejs-mate');
-const { stat } = require('fs');
-const { wrap } = require('module');
 const ExpressError = require('./utils/ExpressError')
 const campgroundRoutes = require('./routers/campground');
 const reviewRoutes = require('./routers/reviews');
