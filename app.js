@@ -11,6 +11,9 @@ const campgroundRoutes = require('./routers/campground');
 const reviewRoutes = require('./routers/reviews');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp'); 
@@ -31,6 +34,16 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverrride('_method'))
 app.use(express.static('public'))
 app.use(flash());
+app.use(session(sessionConfig));
+//passport.session() should always be after session
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 const msInWeek = 1000*60*60*24*7;
 const sessionConfig = {
@@ -44,7 +57,6 @@ const sessionConfig = {
     }
 };
 
-app.use(session(sessionConfig));
 
 
 app.use((req, res , next) => {
