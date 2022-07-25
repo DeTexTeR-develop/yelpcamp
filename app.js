@@ -9,6 +9,7 @@ const { wrap } = require('module');
 const ExpressError = require('./utils/ExpressError')
 const campgroundRoutes = require('./routers/campground');
 const reviewRoutes = require('./routers/reviews');
+const userRoutes = require('./routers/users');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
@@ -33,11 +34,6 @@ app.engine('ejs', ejsMate);
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverrride('_method'))
 app.use(express.static('public'))
-app.use(flash());
-app.use(session(sessionConfig));
-//passport.session() should always be after session
-app.use(passport.initialize());
-app.use(passport.session());
 
 
 passport.use(new LocalStrategy(User.authenticate()));
@@ -57,6 +53,13 @@ const sessionConfig = {
     }
 };
 
+app.use(session(sessionConfig));
+app.use(flash());
+
+//passport.session() should always be after session
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 
 app.use((req, res , next) => {
@@ -65,6 +68,7 @@ app.use((req, res , next) => {
     next();
 })
 
+app.use('/user', userRoutes);
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
 
