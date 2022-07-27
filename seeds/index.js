@@ -23,6 +23,7 @@ const seedDb = async () =>{
         const randomNumber = Math.floor(Math.random() * 1000);
         const price = Math.floor(Math.random()* 20)  + 10;
         const camp = new Campground({
+            author:'62deb6842b62a6741e5a598b',
             location: `${Cities[randomNumber].city}, ${Cities[randomNumber].state}`,
             // title: `${randomTitle(descriptors)}`                    //why is it not working
             title : `${descriptors[Math.floor(Math.random() * descriptors.length)] +" "+ places[Math.floor(Math.random() * places.length)]}`
