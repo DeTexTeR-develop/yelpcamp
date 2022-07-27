@@ -6,6 +6,10 @@ const Campground = require('../models/campground');
 const {isReviewAuthor, validateReview, isLoggedIn} = require('../middleware');
 
 
+router.get('/:reviewId' ,(req, res) => {
+    res.redirect(`/campgrounds/${req.params.id}`);
+})
+
 router.post('/',validateReview, isLoggedIn, wrapAsync(async(req, res) => {
     const {id} = req.params;
     const campground = await Campground.findById(id);
