@@ -6,10 +6,6 @@ const Campground = require('../models/campground');
 const {isLoggedIn, isAuthor ,validateCampground} = require('../middleware');
 
 
-
-
-
-
 router.get('/home',(req, res) => {
     res.render('campgrounds/home')
 })
