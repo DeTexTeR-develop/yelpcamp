@@ -29,7 +29,7 @@ const seedDb = async () =>{
             title : `${descriptors[Math.floor(Math.random() * descriptors.length)] +" "+ places[Math.floor(Math.random() * places.length)]}`
             //and this is working 
             ,
-            image: 'https://source.unsplash.com/collection/483251',
+            image: 'https://images.unsplash.com/photo-1444290761372-6c983c9fb249?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1163&q=80',
             description:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repudiandae quia labore consequatur a temporibus corrupti reiciendis cum molestias sunt eum? Ipsa aperiam quidem perspiciatis aut tenetur consectetur perferendis voluptates at.',
             price //price: price
         });
