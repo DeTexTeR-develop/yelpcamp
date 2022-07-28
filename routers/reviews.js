@@ -5,8 +5,11 @@ const review = require('../controllers/review');
 
 const {isReviewAuthor, validateReview, isLoggedIn} = require('../middleware');
 
-router.get('/:reviewId', review.getAtReviews);
+router.route('/:reviewId')
+	.get(review.getAtReviews)
+	.delete(isReviewAuthor, isLoggedIn, wrapAsync(review.deleteReviews))
+
 router.post('/',validateReview, isLoggedIn, wrapAsync(review.addReviews));
-router.delete('/:reviewId',isReviewAuthor, isLoggedIn, wrapAsync(review.deleteReviews));
+
 
 module.exports = router;
