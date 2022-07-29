@@ -12,16 +12,7 @@ router.get('/create',isLoggedIn, campgrounds.renderNewForm);
 
 router.route('/')
 	.get(catchAsync(campgrounds.indexPage))
-	// .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createNewCampground))
-
-	// for uploading single file
-	// .post(upload.single('image'), (req, res) => {
-
-	//for multiple files
-	.post(upload.array('image'), (req, res) => {
-		console.log(req.body , req.files);
-		res.send('it worked');
-	})
+	.post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createNewCampground))
 
 router.route('/:id')
 	.get(catchAsync(campgrounds.showCampground))
