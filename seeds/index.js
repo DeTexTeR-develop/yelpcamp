@@ -29,9 +29,19 @@ const seedDb = async () =>{
             title : `${descriptors[Math.floor(Math.random() * descriptors.length)] +" "+ places[Math.floor(Math.random() * places.length)]}`
             //and this is working 
             ,
-            image: 'https://images.unsplash.com/photo-1444290761372-6c983c9fb249?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1163&q=80',
             description:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repudiandae quia labore consequatur a temporibus corrupti reiciendis cum molestias sunt eum? Ipsa aperiam quidem perspiciatis aut tenetur consectetur perferendis voluptates at.',
-            price //price: price
+            price, //price: price
+            images: [
+                {
+                    url: 'https://res.cloudinary.com/dlvvqr18r/image/upload/v1659185983/YelpCamp/fvxnvo55hm1xwr8hmycr.jpg',
+                    filename: 'YelpCamp/fvxnvo55hm1xwr8hmycr',
+                },
+                {
+                    url: 'https://res.cloudinary.com/dlvvqr18r/image/upload/v1659185984/YelpCamp/sx8hxi6nnn6fadjqsjb3.jpg',
+                    filename: 'YelpCamp/sx8hxi6nnn6fadjqsjb3',
+                  
+                }
+            ]
         });
         // console.log(camp.title);
         await camp.save();
