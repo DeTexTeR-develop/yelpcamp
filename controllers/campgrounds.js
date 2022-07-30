@@ -16,7 +16,12 @@ module.exports.renderNewForm = (req, res) => {
 module.exports.createNewCampground = async (req, res, next) => {
     // if(!req.body.campground) throw new ExpressError("Invalid Campground Data", 400);
     const campground = new Campground(req.body.campground);
-    campground.images = req.files.map(f => ({url: f.path, filename: f.filename}));
+    const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
+    if(imgs.length > 4){
+        req.flash('error', 'You can only upload upto 3 photos');
+        return res.redirect(`/campgrounds/create`);
+    }
+    campground.images = imgs
     campground.author = req.user._id;
     await campground.save();
     console.log(campground);
@@ -46,7 +51,7 @@ module.exports.renderUpdateForm = async (req, res) => {
     const campground = await Campground.findById(id);
     if(!campground){
         req.flash('error', 'Campground not found');
-         res.redirect('/campgrounds');
+        res.redirect('/campgrounds');
     }
     res.render('campgrounds/edit', {campground});
 
@@ -71,6 +76,13 @@ module.exports.renderUpdateForm = async (req, res) => {
 module.exports.updateCampgrounds = async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    const img = req.files.map(f => ({url: f.path, filename: f.filename}));
+    if(img.length > 4){
+        req.flash('error', 'You can only upload upto 3 photos');
+        return res.redirect(`/campgrounds/create`);
+    }
+    campground.images.push(...img); // pass img as seperate arguments to push
+    await campground.save();
     req.flash('success', 'Successfully updated campground');
     res.redirect(`/campgrounds/${campground._id}`);
 };

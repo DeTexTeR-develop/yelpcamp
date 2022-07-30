@@ -5,7 +5,11 @@ const {isLoggedIn, isAuthor ,validateCampground} = require('../middleware');
 const campgrounds = require('../controllers/campgrounds');
 const multer = require('multer');
 const {storage} = require('../cloudinary')
-const upload = multer({storage});
+const upload = multer({
+	storage,
+	limits: { fileSize: 500000 } 
+	//filesize in bytes, in this case it's 500 kb 
+}); 
 
 router.get('/home',campgrounds.home)
 router.get('/create',isLoggedIn, campgrounds.renderNewForm);
@@ -16,7 +20,7 @@ router.route('/')
 
 router.route('/:id')
 	.get(catchAsync(campgrounds.showCampground))
-	.put(isAuthor,validateCampground, catchAsync(campgrounds.updateCampgrounds))
+	.put(isAuthor, upload.array('image'), validateCampground, catchAsync(campgrounds.updateCampgrounds))
 	.delete(isAuthor,isLoggedIn, catchAsync(campgrounds.deleteCampground))
 
 
