@@ -1,8 +1,11 @@
 <% layout('layouts/boilerplate')%>
+<script>
+    const mapTokken = '<%-process.env.MAPBOX_TOKKEN%>';
+</script>
 <div class="row">
     <div class="col-6 ">
         <div class="card mb-3">
-                
+            <div id='map' style='width: 400px; height: 300px;'></div>
             <div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <% campground.images.forEach((img, i) => {%>
@@ -102,4 +105,5 @@
     </div>
 
 </div>
+<script src="/js/showPageMap.js"></script>
 

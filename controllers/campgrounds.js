@@ -1,5 +1,8 @@
 const Campground = require('../models/campground');
 const {cloudinary} = require('../cloudinary');
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapboxToken =  process.env.MAPBOX_TOKKEN;
+const geoCoder =  mbxGeocoding({accessToken:mapboxToken});
 
 
 module.exports.home = (req, res) => {
@@ -16,8 +19,13 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createNewCampground = async (req, res, next) => {
+    const geoData = await geoCoder.forwardGeocode({
+        query: req.body.campground.location,
+        limit:1
+    }).send()
     // if(!req.body.campground) throw new ExpressError("Invalid Campground Data", 400);
     const campground = new Campground(req.body.campground);
+    campground.geometry =  geoData.body.features[0].geometry;
     const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
     if(imgs.length > 4){
         req.flash('error', 'You can only upload upto 3 photos');
@@ -27,6 +35,7 @@ module.exports.createNewCampground = async (req, res, next) => {
     campground.author = req.user._id;
     await campground.save();
     req.flash('success', 'successfully made a new campground');
+    console.log(campground);
     res.redirect(`/campgrounds/${campground._id}`);
 };
 
