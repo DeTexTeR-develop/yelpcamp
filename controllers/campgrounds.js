@@ -25,6 +25,10 @@ module.exports.createNewCampground = async (req, res, next) => {
     }).send()
     // if(!req.body.campground) throw new ExpressError("Invalid Campground Data", 400);
     const campground = new Campground(req.body.campground);
+    if(!campground.geometry){
+        req.flash('error', 'cannot find this location on map!');
+        return res.redirect('/campgrounds');
+    }
     campground.geometry =  geoData.body.features[0].geometry;
     const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
     if(imgs.length > 4){
@@ -84,8 +88,17 @@ module.exports.renderUpdateForm = async (req, res) => {
 //   or
 
 module.exports.updateCampgrounds = async (req, res, next) => {
+    const geoData = await geoCoder.forwardGeocode({
+        query: req.body.campground.location,
+        limit:1
+    }).send()
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    if(!campground.geometry){
+        req.flash('error', 'cannot find this location on map!');
+        return res.redirect('/campgrounds');
+    }
+    campground.geometry =  geoData.body.features[0].geometry;
     const img = req.files.map(f => ({url: f.path, filename: f.filename}));
     if(img.length > 4){
         req.flash('error', 'You can only upload upto 3 photos');
