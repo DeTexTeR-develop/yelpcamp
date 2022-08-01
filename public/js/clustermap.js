@@ -83,7 +83,7 @@
         layers: ['clusters']
         });
         const clusterId = features[0].properties.cluster_id;
-        map.getSource('earthquakes').getClusterExpansionZoom(
+        map.getSource('campgrounds').getClusterExpansionZoom(
         clusterId,
         (err, zoom) => {
         if (err) return;
