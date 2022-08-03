@@ -16,6 +16,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
+const mongoSanatize = require('express-mongo-sanitize');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp'); 
 
@@ -33,7 +34,7 @@ app.engine('ejs', ejsMate);
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverrride('_method'));
 app.use(express.static('public'));
-
+app.use(mongoSanatize());
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
