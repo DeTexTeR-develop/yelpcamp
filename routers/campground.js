@@ -11,7 +11,6 @@ const upload = multer({
 	//filesize in bytes, in this case it's 500 kb 
 }); 
 
-router.get('/home',campgrounds.home)
 router.get('/create',isLoggedIn, campgrounds.renderNewForm);
 
 router.route('/')
