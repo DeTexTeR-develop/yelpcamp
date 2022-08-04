@@ -12,13 +12,15 @@ const campgroundRoutes = require('./routers/campground');
 const reviewRoutes = require('./routers/reviews');
 const userRoutes = require('./routers/users');
 const session = require('express-session');
+const MongoDbStore = require('connect-mongo')(session)
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const mongoSanatize = require('express-mongo-sanitize');
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp'); 
+const dbUrl = process.env.DB || 'mongodb://localhost:27017/yelp-camp';
+mongoose.connect(dbUrl); 
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -41,13 +43,28 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 const msInWeek = 1000*60*60*24*7;
+const secret = process.env.SECRET || 'thisisnotaverygoodsecret';
+
+
+const store = new MongoDbStore({
+    url:dbUrl,
+    secret,
+    touchAfter: 24*60*60
+})
+
+store.on('error' , function(e){
+    console.log('session store error')
+})
 
 const sessionConfig = {
-    secret: 'thisShouldBeABetterSecret',
+    store,
+    name: 'session',
+    secret,
     resave:false,
     saveUninitialized:true,
     cookie: {
         httpOnly:true,
+        // secure :true, //cookies can only be changes/config through https
         expires: Date.now() + msInWeek,
         maxAge: msInWeek
     }
