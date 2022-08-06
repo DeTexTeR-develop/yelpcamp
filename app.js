@@ -109,6 +109,4 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', { err });
 })
 
-app.listen(port, ()=> {
-    console.log(`Listening on port ${port} `);
-})
+module.exports = app;
