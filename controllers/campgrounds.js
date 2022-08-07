@@ -11,7 +11,7 @@ module.exports.home = (req, res) => {
 
 module.exports.indexPage = async (req, res) => {
     const allcamprounds = await Campground.find({}); 
-    res.status(201).render('campgrounds/index', {allcamprounds});
+    res.render('campgrounds/index', {allcamprounds});
 };
 
 module.exports.renderNewForm = (req, res) => {
