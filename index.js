@@ -18,21 +18,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const mongoSanatize = require('express-mongo-sanitize');
+const dbConnect = require('./config/dbConnect');
 const dbUrl = process.env.DB;
-
-
-// const dbUrl = '';
-mongoose.connect(dbUrl , {
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-}); 
-
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", ()=>{
-    console.log("Database connected");
-});
-
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -42,6 +29,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverrride('_method'));
 app.use(express.static('public'));
 app.use(mongoSanatize());
+dbConnect();
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
