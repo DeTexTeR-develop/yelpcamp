@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "node server.js",
-    "build": "netlify deploy --prod"
+    "build": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "netlify-cli": "^17.8.1",
     "netlify-lambda": "^2.0.16",
+    "nodemon": "^3.0.2",
     "npm": "^8.16.0",
     "override": "^0.0.1",
     "passport": "^0.5.0",
