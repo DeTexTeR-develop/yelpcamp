@@ -2,7 +2,7 @@ if(process.env.NODE_ENV !== "production"){
     require('dotenv').config();
 };
 const express = require('express');
-const { default: mongoose} = require('mongoose');
+const { default: mongoose } = require('mongoose');
 const app = express();
 const path = require('path');
 const methodOverrride = require('method-override');
@@ -12,7 +12,7 @@ const campgroundRoutes = require('./routers/campground');
 const reviewRoutes = require('./routers/reviews');
 const userRoutes = require('./routers/users');
 const session = require('express-session');
-const MongoDbStore = require('connect-mongo')(session)
+const MongoDbStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
